@@ -32,9 +32,9 @@ fn main() -> Result<(), Box<dyn error::Error>> {
     let (sending_channel, receiving_channel) = channel();
     for path in config.files {
         let sender = sending_channel.clone();
-        let directory = Path::new(&config.directory).join(path);
+        let file = Path::new(&config.directory).join(path);
         pool.execute(move || {
-            if let Ok(lines) = read_lines(directory) {
+            if let Ok(lines) = read_lines(file) {
                 for line in lines {
                     if let Ok(data) = line {
                         if let Err(error) = sender.send(data) {
